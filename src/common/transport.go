@@ -11,6 +11,7 @@ type Binder func(r *http.Request) (params Parameters, err error)
 type ResponseEncoder func(w http.ResponseWriter, httpStatus int, response ResponseType, headers map[string]string) error
 type ErrorLogger func(r *http.Request, httpStatus int, e error)
 
+//Endpoint contains binder, handler, encoder and logger for a http request
 type Endpoint struct {
 	handler Handler
 	binder  Binder
@@ -22,6 +23,7 @@ func NewEndpoint(handler Handler, binder Binder, encoder ResponseEncoder, logger
 	return &Endpoint{handler, binder, encoder, logger}
 }
 
+//GetHandler return a http handler for the given endpoint
 func GetHandler(api *Endpoint) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var params Parameters
